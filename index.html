@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101b15">
+  <title>Quem é o craque? — Jogo de futebol</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #101b15;
+      color: #f5f7f2;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --muted: #a8b5aa;
+      --green: #b6f36a;
+      --panel: #19271f;
+      --line: #304237;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 50% -20%, #294b34 0, transparent 55%),
+        #101b15;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .page {
+      width: min(100%, 720px);
+      margin: 0 auto;
+      padding: 38px 16px 48px;
+    }
+
+    header { text-align: center; margin-bottom: 28px; }
+
+    .eyebrow {
+      color: var(--green);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 9px 0 8px;
+      font-size: clamp(2.2rem, 8vw, 3.5rem);
+      letter-spacing: -.055em;
+      line-height: 1;
+    }
+
+    h1 span { color: var(--green); }
+    .intro { color: var(--muted); margin: 0; }
+
+    .scoreboard {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 24px 0 18px;
+    }
+
+    .stat {
+      min-width: 120px;
+      padding: 12px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #152119;
+      text-align: center;
+    }
+
+    .stat-label {
+      display: block;
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .stat strong { display: block; margin-top: 3px; font-size: 1.35rem; }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(145deg, #1d2c23, #17231c 72%);
+      box-shadow: 0 24px 70px #0003;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-top strong { font-size: .95rem; }
+    .round { color: var(--muted); font-size: .85rem; }
+
+    .content { padding: 26px 24px 24px; }
+    .prompt { margin: 0 0 18px; color: var(--muted); }
+
+    .career {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 24px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .career li {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 13px;
+      border: 1px solid #3c5143;
+      border-radius: 11px;
+      background: #24352a;
+      font-weight: 700;
+    }
+
+    .career li:not(:last-child)::after {
+      content: "→";
+      margin-left: 1px;
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .guess-form { display: flex; gap: 10px; }
+
+    .guess-form input {
+      width: 100%;
+      min-width: 0;
+      padding: 14px 15px;
+      border: 1px solid #425748;
+      border-radius: 12px;
+      outline: none;
+      background: #111c15;
+      color: #fff;
+    }
+
+    .guess-form input:focus { border-color: var(--green); box-shadow: 0 0 0 3px #b6f36a22; }
+
+    .primary, .secondary {
+      border: 0;
+      border-radius: 12px;
+      padding: 13px 18px;
+      font-weight: 800;
+      transition: transform .15s, background .15s;
+    }
+
+    .primary { flex: 0 0 auto; background: var(--green); color: #172315; }
+    .primary:hover { background: #c9ff89; transform: translateY(-1px); }
+    .secondary { border: 1px solid var(--line); background: #213027; color: #edf4ed; }
+    .secondary:hover { background: #2a3a30; }
+    button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+    .feedback {
+      min-height: 28px;
+      margin: 14px 2px 0;
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .feedback.good { color: var(--green); }
+    .feedback.bad { color: #ff9a8d; }
+
+    .bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .lives { color: var(--muted); font-size: .9rem; font-weight: 750; }
+
+    .progress-track {
+      height: 7px;
+      margin: 0 24px 22px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #101a14;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--green);
+      transition: width .25s ease;
+    }
+
+    .how-to {
+      margin: 17px 4px 0;
+      color: var(--muted);
+      font-size: .85rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    @media (max-width: 520px) {
+      .page {
+        padding: max(20px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      }
+
+      header { margin-bottom: 18px; }
+      h1 { font-size: clamp(2rem, 9vw, 2.8rem); }
+      .intro { font-size: .9rem; line-height: 1.45; }
+
+      .scoreboard {
+        gap: 8px;
+        margin: 18px 0 14px;
+      }
+
+      .stat {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 10px 7px;
+        border-radius: 12px;
+      }
+
+      .stat-label { font-size: .65rem; }
+      .stat strong { font-size: clamp(1rem, 5vw, 1.25rem); }
+      #lives { font-size: clamp(.85rem, 4vw, 1.05rem); white-space: nowrap; }
+
+      .card { border-radius: 18px; }
+      .card-top { padding: 16px; }
+      .card-top strong { font-size: .88rem; }
+      .round { flex: 0 0 auto; font-size: .76rem; }
+      .progress-track { margin: 0 16px 16px; }
+      .content { padding: 18px 16px 16px; }
+      .prompt { margin-bottom: 14px; font-size: .9rem; line-height: 1.45; }
+
+      .career { gap: 8px; margin-bottom: 20px; }
+      .career li {
+        max-width: 100%;
+        padding: 9px 10px;
+        font-size: .88rem;
+        overflow-wrap: anywhere;
+      }
+
+      .guess-form { flex-direction: column; gap: 9px; }
+      .guess-form input { min-height: 48px; padding: 12px 14px; font-size: 16px; }
+      .guess-form .primary { width: 100%; min-height: 48px; }
+      .secondary { min-height: 46px; }
+      .feedback { font-size: .92rem; line-height: 1.45; }
+
+      .bottom-row { flex-wrap: wrap; align-items: center; }
+      .lives { flex: 1 1 100%; font-size: .85rem; }
+      .bottom-row #next { margin-left: auto; }
+      .how-to { margin-top: 14px; font-size: .8rem; }
+    }
+
+    @media (max-width: 360px) {
+      .page {
+        padding-right: max(10px, env(safe-area-inset-right));
+        padding-left: max(10px, env(safe-area-inset-left));
+      }
+
+      .scoreboard { gap: 6px; }
+      .stat { padding-right: 4px; padding-left: 4px; }
+      .stat-label { font-size: .6rem; letter-spacing: .06em; }
+      #lives { font-size: .8rem; letter-spacing: -.08em; }
+      .card-top { gap: 6px; padding: 14px 12px; }
+      .card-top strong { font-size: .82rem; }
+      .round { font-size: .7rem; }
+      .progress-track { margin-right: 12px; margin-left: 12px; }
+      .content { padding-right: 12px; padding-left: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="eyebrow">Desafio de futebol</div>
+      <h1>Quem é <span>o craque?</span></h1>
+      <p class="intro">Descubra craques que fizeram história no futebol brasileiro.</p>
+    </header>
+
+    <section class="scoreboard" aria-label="Placar">
+      <div class="stat"><span class="stat-label">Meta</span><strong>50</strong></div>
+      <div class="stat"><span class="stat-label">Acertos</span><strong id="hits">0 / 50</strong></div>
+      <div class="stat"><span class="stat-label">Vidas</span><strong id="lives" aria-label="5 vidas">❤️❤️❤️❤️❤️</strong></div>
+    </section>
+
+    <section class="card" aria-labelledby="career-title">
+      <div class="card-top">
+        <strong id="career-title">🧭 A carreira do jogador</strong>
+        <span class="round" id="round">Jogador 1 de 50</span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Progresso da meta" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0">
+        <div class="progress-bar" id="progress"></div>
+      </div>
+      <div class="content">
+        <p class="prompt">Alguns dos clubes por onde ele passou, em ordem:</p>
+        <ol class="career" id="career" aria-label="Clubes da carreira"></ol>
+
+        <form class="guess-form" id="guess-form">
+          <label for="guess" hidden>Nome do jogador</label>
+          <input id="guess" name="guess" type="text" placeholder="Digite o nome do jogador..." autocomplete="off" required>
+          <button class="primary" type="submit">Responder</button>
+        </form>
+        <p class="feedback" id="feedback" aria-live="polite">Acerte 50 jogadores. Você tem 5 vidas para a campanha!</p>
+        <div class="bottom-row">
+          <span class="lives" id="lives-label">Erros encerram a campanha: 0 de 5</span>
+          <button class="secondary" id="next" type="button" hidden>Próximo jogador →</button>
+        </div>
+      </div>
+    </section>
+    <p class="how-to">Cada erro custa uma vida. Acerte os 50 jogadores sem deixar as vidas acabarem!</p>
+  </main>
+
+  <script>
+    const players = [
+      { name: "Rogério Ceni", aliases: ["rogerio ceni", "m1to"], clubs: ["Sinop", "São Paulo"] },
+      { name: "Marcos", aliases: ["marcos", "marcos goleiro", "são marcos"], clubs: ["Palmeiras"] },
+      { name: "Fábio", aliases: ["fabio", "fabio deivson"], clubs: ["Vasco", "Cruzeiro", "Fluminense"] },
+      { name: "Cássio", aliases: ["cassio", "cassio ramos"], clubs: ["PSV", "Corinthians", "Cruzeiro"] },
+      { name: "Weverton", aliases: ["weverton pereira"], clubs: ["Portuguesa", "Athletico Paranaense", "Palmeiras"] },
+      { name: "Jefferson", aliases: ["jefferson goleiro"], clubs: ["Botafogo", "Trabzonspor", "Botafogo"] },
+      { name: "Victor", aliases: ["victor goleiro", "victor leandro bagy"], clubs: ["Grêmio", "Atlético Mineiro"] },
+      { name: "Fernando Prass", aliases: ["prass"], clubs: ["Vasco", "Palmeiras", "Ceará", "Avaí"] },
+      { name: "Zetti", aliases: ["arnaldo zetti"], clubs: ["Guarani", "Palmeiras", "São Paulo", "Santos"] },
+      { name: "Vanderlei", aliases: ["vanderlei goleiro", "vanderlei farias"], clubs: ["Coritiba", "Santos", "Grêmio"] },
+      { name: "Zico", aliases: ["zico", "arthur antunes coimbra"], clubs: ["Flamengo", "Udinese", "Flamengo", "Kashima Antlers"] },
+      { name: "Júnior", aliases: ["junior", "leovegildo junior", "leovegildo"], clubs: ["Flamengo", "Torino", "Pescara", "Flamengo"] },
+      { name: "Sócrates", aliases: ["socrates", "socrates brasileiro"], clubs: ["Corinthians", "Fiorentina", "Flamengo", "Santos"] },
+      { name: "Raí", aliases: ["rai", "rai souza vieira"], clubs: ["Botafogo-SP", "São Paulo", "Paris Saint-Germain", "São Paulo"] },
+      { name: "Careca", aliases: ["careca", "antonio de oliveira filho"], clubs: ["Guarani", "São Paulo", "Napoli", "Kashiwa Reysol"] },
+      { name: "Müller", aliases: ["muller", "luiz antonio correa da costa"], clubs: ["São Paulo", "Torino", "São Paulo", "Santos"] },
+      { name: "Edmundo", aliases: ["edmundo", "animal"], clubs: ["Vasco", "Palmeiras", "Fiorentina", "Vasco"] },
+      { name: "Romário", aliases: ["romario", "baixinho"], clubs: ["Vasco", "PSV", "Barcelona", "Flamengo", "Fluminense"] },
+      { name: "Túlio Maravilha", aliases: ["tulio maravilha", "tulio"], clubs: ["Botafogo", "Corinthians", "Goiás", "Botafogo"] },
+      { name: "Viola", aliases: ["viola", "paulo sergio rosa"], clubs: ["Corinthians", "Valencia", "Palmeiras", "Santos"] },
+      { name: "Fred", aliases: ["fred", "fred guedes", "frederico chaves guedes"], clubs: ["América Mineiro", "Lyon", "Fluminense", "Atlético Mineiro"] },
+      { name: "Luis Fabiano", aliases: ["luiz fabiano", "fabuloso"], clubs: ["Ponte Preta", "Sevilla", "São Paulo", "Vasco"] },
+      { name: "Diego Tardelli", aliases: ["tardelli"], clubs: ["São Paulo", "Real Betis", "Atlético Mineiro", "Shandong Taishan"] },
+      { name: "Diego Souza", aliases: ["diego souza"], clubs: ["Palmeiras", "Benfica", "Vasco", "Sport"] },
+      { name: "Dagoberto", aliases: ["dagoberto pelentier"], clubs: ["Athletico Paranaense", "São Paulo", "Internacional", "Cruzeiro"] },
+      { name: "Grafite", aliases: ["grafite", "edinaldo batista libanio"], clubs: ["São Paulo", "Le Mans", "Wolfsburg", "Santa Cruz"] },
+      { name: "Rafael Sóbis", aliases: ["rafael sobis", "sobis"], clubs: ["Internacional", "Real Betis", "Fluminense", "Cruzeiro"] },
+      { name: "Alex de Souza", aliases: ["alex", "alex cabeção", "alex de souza"], clubs: ["Coritiba", "Palmeiras", "Fenerbahçe", "Coritiba"] },
+      { name: "Darío Conca", aliases: ["dario conca", "conca"], clubs: ["Fluminense", "Guangzhou Evergrande", "Fluminense", "Flamengo"] },
+      { name: "Petkovic", aliases: ["dejan petkovic", "pet"], clubs: ["Flamengo", "Vasco", "Santos", "Atlético Mineiro", "Flamengo"] },
+      { name: "Paulo Nunes", aliases: ["paulo nunes"], clubs: ["Flamengo", "Grêmio", "Palmeiras", "Corinthians"] },
+      { name: "Kléber Gladiador", aliases: ["kleber gladiador", "kleber"], clubs: ["Dynamo Kyiv", "Palmeiras", "Grêmio", "Vasco"] },
+      { name: "Aloísio Chulapa", aliases: ["aloisio chulapa", "aloisio"], clubs: ["Saint-Étienne", "Paris Saint-Germain", "São Paulo", "Al-Rayyan"] },
+      { name: "Borges", aliases: ["borges", "junior dutra borges"], clubs: ["Paraná", "São Paulo", "Grêmio", "Santos", "Cruzeiro"] },
+      { name: "Leandro Damião", aliases: ["leandro damiao", "damiao"], clubs: ["Internacional", "Santos", "Flamengo", "Kawasaki Frontale"] },
+      { name: "Renato Augusto", aliases: ["renato augusto"], clubs: ["Corinthians", "Bayer Leverkusen", "Beijing Guoan", "Corinthians"] },
+      { name: "Everton Ribeiro", aliases: ["everton ribeiro"], clubs: ["Cruzeiro", "Al-Ahli", "Flamengo", "Bahia"] },
+      { name: "Dudu", aliases: ["dudu palmeiras", "eduardo pereira rodrigues"], clubs: ["Palmeiras", "Al-Duhail", "Palmeiras", "Cruzeiro"] },
+      { name: "Gabigol", aliases: ["gabriel barbosa", "gabriel barbosa almeida"], clubs: ["Santos", "Internazionale", "Flamengo", "Cruzeiro"] },
+      { name: "Pedro", aliases: ["pedro guilherme"], clubs: ["Fluminense", "Fiorentina", "Flamengo"] },
+      { name: "Bruno Henrique", aliases: ["bruno henrique"], clubs: ["Wolfsburg", "Santos", "Flamengo"] },
+      { name: "Ganso", aliases: ["paulo henrique ganso", "ph ganso"], clubs: ["Santos", "Sevilla", "Amiens", "Fluminense"] },
+      { name: "Rony", aliases: ["rony"], clubs: ["Athletico Paranaense", "Palmeiras", "Atlético Mineiro"] },
+      { name: "Marinho", aliases: ["marinho"], clubs: ["Ceará", "Santos", "Flamengo", "Fortaleza"] },
+      { name: "Léo Moura", aliases: ["leo moura", "leonardo moura"], clubs: ["Palmeiras", "Flamengo", "Grêmio", "Botafogo-PB"] },
+      { name: "Felipe Melo", aliases: ["felipe melo"], clubs: ["Galatasaray", "Palmeiras", "Fluminense"] },
+      { name: "D'Alessandro", aliases: ["d alessandro", "andres d alessandro", "andrés d'alessandro"], clubs: ["Internacional", "River Plate", "Internacional", "Nacional", "Internacional"] },
+      { name: "Elano", aliases: ["elano blumer"], clubs: ["Santos", "Manchester City", "Galatasaray", "Santos", "Grêmio"] },
+      { name: "Adriano", aliases: ["adriano imperador", "imperador"], clubs: ["Internazionale", "Flamengo", "Roma", "Corinthians", "Flamengo"] },
+      { name: "Paulo Baier", aliases: ["paulo baier"], clubs: ["Criciúma", "Goiás", "Athletico Paranaense", "Figueirense"] }
+    ];
+
+    const goal = 50;
+    const startingLives = 5;
+    const hitsElement = document.querySelector("#hits");
+    const livesElement = document.querySelector("#lives");
+    const roundElement = document.querySelector("#round");
+    const progressTrack = document.querySelector(".progress-track");
+    const progressElement = document.querySelector("#progress");
+    const careerElement = document.querySelector("#career");
+    const form = document.querySelector("#guess-form");
+    const guessInput = document.querySelector("#guess");
+    const feedbackElement = document.querySelector("#feedback");
+    const livesLabel = document.querySelector("#lives-label");
+    const nextButton = document.querySelector("#next");
+
+    let hits = 0;
+    let lives = startingLives;
+    let deck = [];
+    let deckIndex = 0;
+    let currentPlayer;
+    let gameEnded = false;
+
+    function normalize(value) {
+      return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim().replace(/\s+/g, " ");
+    }
+
+    function shuffle(items) {
+      const shuffled = [...items];
+      for (let i = shuffled.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    function updateScoreboard() {
+      hitsElement.textContent = `${hits} / ${goal}`;
+      livesElement.textContent = `${"❤️".repeat(lives)}${"🖤".repeat(startingLives - lives)}`;
+      livesElement.setAttribute("aria-label", `${lives} de ${startingLives} vidas`);
+      livesLabel.textContent = `Erros: ${startingLives - lives} de ${startingLives}`;
+      progressElement.style.width = `${(hits / goal) * 100}%`;
+      progressTrack.setAttribute("aria-valuenow", hits);
+    }
+
+    function showPlayer() {
+      currentPlayer = deck[deckIndex];
+      roundElement.textContent = `Jogador ${deckIndex + 1} de ${goal}`;
+      careerElement.replaceChildren(...currentPlayer.clubs.map((club) => {
+        const item = document.createElement("li");
+        item.textContent = club;
+        return item;
+      }));
+      feedbackElement.textContent = "Quem é esse jogador?";
+      feedbackElement.className = "feedback";
+      guessInput.value = "";
+      guessInput.disabled = false;
+      form.querySelector("button").disabled = false;
+      nextButton.hidden = true;
+      guessInput.focus();
+    }
+
+    function endGame(won) {
+      gameEnded = true;
+      guessInput.disabled = true;
+      form.querySelector("button").disabled = true;
+      nextButton.hidden = false;
+      nextButton.textContent = "Jogar novamente ↻";
+      feedbackElement.textContent = won
+        ? "🏆 Parabéns! Você acertou os 50 jogadores e venceu!"
+        : `Fim de jogo! Você acertou ${hits} de ${goal}. O jogador era ${currentPlayer.name}.`;
+      feedbackElement.className = `feedback ${won ? "good" : "bad"}`;
+      nextButton.focus();
+    }
+
+    function finishPlayer(message, className) {
+      feedbackElement.textContent = message;
+      feedbackElement.className = `feedback ${className}`;
+      guessInput.disabled = true;
+      form.querySelector("button").disabled = true;
+      nextButton.hidden = false;
+      nextButton.textContent = "Próximo jogador →";
+      nextButton.focus();
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (gameEnded) return;
+
+      const guess = normalize(guessInput.value);
+      if (!guess) return;
+
+      const acceptedNames = [currentPlayer.name, ...currentPlayer.aliases].map(normalize);
+
+      if (acceptedNames.includes(guess)) {
+        hits += 1;
+        updateScoreboard();
+        if (hits === goal) {
+          endGame(true);
+        } else {
+          finishPlayer(`Acertou! Era ${currentPlayer.name}.`, "good");
+        }
+      } else {
+        lives -= 1;
+        updateScoreboard();
+        if (lives === 0) {
+          endGame(false);
+          return;
+        }
+        feedbackElement.textContent = `Não é esse. Você perdeu uma vida; ainda restam ${lives}.`;
+        feedbackElement.className = "feedback bad";
+        guessInput.value = "";
+        guessInput.focus();
+      }
+    });
+
+    function resetGame() {
+      hits = 0;
+      lives = startingLives;
+      deck = shuffle(players);
+      deckIndex = 0;
+      gameEnded = false;
+      updateScoreboard();
+      nextButton.textContent = "Próximo jogador →";
+      showPlayer();
+    }
+
+    nextButton.addEventListener("click", () => {
+      if (gameEnded) {
+        resetGame();
+        return;
+      }
+      deckIndex += 1;
+      showPlayer();
+    });
+
+    resetGame();
+  </script>
+</body>
+</html>
