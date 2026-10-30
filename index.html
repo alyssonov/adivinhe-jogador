@@ -86,6 +86,23 @@
 
     .stat strong { display: block; margin-top: 3px; font-size: 1.35rem; }
 
+    #lives {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .05em;
+      white-space: nowrap;
+    }
+
+    .life-icon {
+      flex: 0 0 1.4em;
+      width: 1.4em;
+      font-size: .75em;
+      line-height: 1;
+      text-align: center;
+    }
+    .life-icon.is-lost { opacity: .25; filter: grayscale(1); }
+
     .card {
       overflow: hidden;
       border: 1px solid var(--line);
@@ -233,7 +250,7 @@
 
       .stat-label { font-size: .65rem; }
       .stat strong { font-size: clamp(1rem, 5vw, 1.25rem); }
-      #lives { font-size: clamp(.85rem, 4vw, 1.05rem); white-space: nowrap; }
+      #lives { font-size: clamp(.85rem, 4vw, 1.05rem); }
 
       .card { border-radius: 18px; }
       .card-top { padding: 16px; }
@@ -272,7 +289,7 @@
       .scoreboard { gap: 6px; }
       .stat { padding-right: 4px; padding-left: 4px; }
       .stat-label { font-size: .6rem; letter-spacing: .06em; }
-      #lives { font-size: .8rem; letter-spacing: -.08em; }
+      #lives { font-size: .8rem; }
       .card-top { gap: 6px; padding: 14px 12px; }
       .card-top strong { font-size: .82rem; }
       .round { font-size: .7rem; }
@@ -292,7 +309,7 @@
     <section class="scoreboard" aria-label="Placar">
       <div class="stat"><span class="stat-label">Meta</span><strong>50</strong></div>
       <div class="stat"><span class="stat-label">Acertos</span><strong id="hits">0 / 50</strong></div>
-      <div class="stat"><span class="stat-label">Vidas</span><strong id="lives" aria-label="5 vidas">❤️❤️❤️❤️❤️</strong></div>
+      <div class="stat"><span class="stat-label">Vidas</span><strong id="lives" aria-label="5 vidas"></strong></div>
     </section>
 
     <section class="card" aria-labelledby="career-title">
@@ -412,7 +429,13 @@
 
     function updateScoreboard() {
       hitsElement.textContent = `${hits} / ${goal}`;
-      livesElement.textContent = `${"❤️".repeat(lives)}${"🖤".repeat(startingLives - lives)}`;
+      livesElement.replaceChildren(...Array.from({ length: startingLives }, (_, index) => {
+        const icon = document.createElement("span");
+        icon.className = `life-icon${index >= lives ? " is-lost" : ""}`;
+        icon.setAttribute("aria-hidden", "true");
+        icon.textContent = "⚽";
+        return icon;
+      }));
       livesElement.setAttribute("aria-label", `${lives} de ${startingLives} vidas`);
       livesLabel.textContent = `Erros: ${startingLives - lives} de ${startingLives}`;
       progressElement.style.width = `${(hits / goal) * 100}%`;
