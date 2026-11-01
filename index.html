@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#101b15">
   <title>Quem é o craque? — Jogo de futebol</title>
   <style>
@@ -321,7 +321,7 @@
         <div class="progress-bar" id="progress"></div>
       </div>
       <div class="content">
-        <p class="prompt">Alguns dos clubes por onde ele passou, em ordem:</p>
+        <p class="prompt">Todos os clubes por onde passou como profissional, em ordem cronológica:</p>
         <ol class="career" id="career" aria-label="Clubes da carreira"></ol>
 
         <form class="guess-form" id="guess-form">
@@ -343,54 +343,54 @@
     const players = [
       { name: "Rogério Ceni", aliases: ["rogerio ceni", "m1to"], clubs: ["Sinop", "São Paulo"] },
       { name: "Marcos", aliases: ["marcos", "marcos goleiro", "são marcos"], clubs: ["Palmeiras"] },
-      { name: "Fábio", aliases: ["fabio", "fabio deivson"], clubs: ["Vasco", "Cruzeiro", "Fluminense"] },
-      { name: "Cássio", aliases: ["cassio", "cassio ramos"], clubs: ["PSV", "Corinthians", "Cruzeiro"] },
-      { name: "Weverton", aliases: ["weverton pereira"], clubs: ["Portuguesa", "Athletico Paranaense", "Palmeiras"] },
-      { name: "Jefferson", aliases: ["jefferson goleiro"], clubs: ["Botafogo", "Trabzonspor", "Botafogo"] },
-      { name: "Victor", aliases: ["victor goleiro", "victor leandro bagy"], clubs: ["Grêmio", "Atlético Mineiro"] },
-      { name: "Fernando Prass", aliases: ["prass"], clubs: ["Vasco", "Palmeiras", "Ceará", "Avaí"] },
-      { name: "Zetti", aliases: ["arnaldo zetti"], clubs: ["Guarani", "Palmeiras", "São Paulo", "Santos"] },
-      { name: "Vanderlei", aliases: ["vanderlei goleiro", "vanderlei farias"], clubs: ["Coritiba", "Santos", "Grêmio"] },
+      { name: "Fábio", aliases: ["fabio", "fabio deivson"], clubs: ["União Bandeirante", "Athletico Paranaense", "Cruzeiro", "Vasco da Gama", "Cruzeiro", "Fluminense"] },
+      { name: "Cássio", aliases: ["cassio", "cassio ramos"], clubs: ["Grêmio", "PSV Eindhoven", "Sparta Rotterdam", "PSV Eindhoven", "Corinthians", "Cruzeiro"] },
+      { name: "Weverton", aliases: ["weverton pereira"], clubs: ["Corinthians", "Remo", "Oeste", "América de Natal", "Botafogo-SP", "Portuguesa", "Athletico Paranaense", "Palmeiras", "Grêmio"] },
+      { name: "Jefferson", aliases: ["jefferson goleiro"], clubs: ["Cruzeiro", "Botafogo", "Trabzonspor", "Konyaspor", "Botafogo"] },
+      { name: "Victor", aliases: ["victor goleiro", "victor leandro bagy"], clubs: ["Paulista", "Ituano", "Grêmio", "Atlético Mineiro"] },
+      { name: "Fernando Prass", aliases: ["prass"], clubs: ["Grêmio", "Francana", "Vila Nova", "Coritiba", "União de Leiria", "Vasco da Gama", "Palmeiras", "Ceará"] },
+      { name: "Zetti", aliases: ["arnaldo zetti"], clubs: ["Toledo", "Palmeiras", "Londrina", "Guarani", "Palmeiras", "São Paulo", "Santos", "Fluminense", "União Barbarense", "Sport Recife"] },
+      { name: "Vanderlei", aliases: ["vanderlei goleiro", "vanderlei farias"], clubs: ["Londrina", "Olímpia", "Paranavaí", "Coritiba", "Santos", "Grêmio", "Vasco da Gama", "Operário Ferroviário", "Vila Nova", "Mirassol"] },
       { name: "Zico", aliases: ["zico", "arthur antunes coimbra"], clubs: ["Flamengo", "Udinese", "Flamengo", "Kashima Antlers"] },
       { name: "Júnior", aliases: ["junior", "leovegildo junior", "leovegildo"], clubs: ["Flamengo", "Torino", "Pescara", "Flamengo"] },
-      { name: "Sócrates", aliases: ["socrates", "socrates brasileiro"], clubs: ["Corinthians", "Fiorentina", "Flamengo", "Santos"] },
-      { name: "Raí", aliases: ["rai", "rai souza vieira"], clubs: ["Botafogo-SP", "São Paulo", "Paris Saint-Germain", "São Paulo"] },
-      { name: "Careca", aliases: ["careca", "antonio de oliveira filho"], clubs: ["Guarani", "São Paulo", "Napoli", "Kashiwa Reysol"] },
-      { name: "Müller", aliases: ["muller", "luiz antonio correa da costa"], clubs: ["São Paulo", "Torino", "São Paulo", "Santos"] },
-      { name: "Edmundo", aliases: ["edmundo", "animal"], clubs: ["Vasco", "Palmeiras", "Fiorentina", "Vasco"] },
-      { name: "Romário", aliases: ["romario", "baixinho"], clubs: ["Vasco", "PSV", "Barcelona", "Flamengo", "Fluminense"] },
-      { name: "Túlio Maravilha", aliases: ["tulio maravilha", "tulio"], clubs: ["Botafogo", "Corinthians", "Goiás", "Botafogo"] },
-      { name: "Viola", aliases: ["viola", "paulo sergio rosa"], clubs: ["Corinthians", "Valencia", "Palmeiras", "Santos"] },
-      { name: "Fred", aliases: ["fred", "fred guedes", "frederico chaves guedes"], clubs: ["América Mineiro", "Lyon", "Fluminense", "Atlético Mineiro"] },
-      { name: "Luis Fabiano", aliases: ["luiz fabiano", "fabuloso"], clubs: ["Ponte Preta", "Sevilla", "São Paulo", "Vasco"] },
-      { name: "Diego Tardelli", aliases: ["tardelli"], clubs: ["São Paulo", "Real Betis", "Atlético Mineiro", "Shandong Taishan"] },
-      { name: "Diego Souza", aliases: ["diego souza"], clubs: ["Palmeiras", "Benfica", "Vasco", "Sport"] },
-      { name: "Dagoberto", aliases: ["dagoberto pelentier"], clubs: ["Athletico Paranaense", "São Paulo", "Internacional", "Cruzeiro"] },
-      { name: "Grafite", aliases: ["grafite", "edinaldo batista libanio"], clubs: ["São Paulo", "Le Mans", "Wolfsburg", "Santa Cruz"] },
-      { name: "Rafael Sóbis", aliases: ["rafael sobis", "sobis"], clubs: ["Internacional", "Real Betis", "Fluminense", "Cruzeiro"] },
-      { name: "Alex de Souza", aliases: ["alex", "alex cabeção", "alex de souza"], clubs: ["Coritiba", "Palmeiras", "Fenerbahçe", "Coritiba"] },
-      { name: "Darío Conca", aliases: ["dario conca", "conca"], clubs: ["Fluminense", "Guangzhou Evergrande", "Fluminense", "Flamengo"] },
-      { name: "Petkovic", aliases: ["dejan petkovic", "pet"], clubs: ["Flamengo", "Vasco", "Santos", "Atlético Mineiro", "Flamengo"] },
-      { name: "Paulo Nunes", aliases: ["paulo nunes"], clubs: ["Flamengo", "Grêmio", "Palmeiras", "Corinthians"] },
-      { name: "Kléber Gladiador", aliases: ["kleber gladiador", "kleber"], clubs: ["Dynamo Kyiv", "Palmeiras", "Grêmio", "Vasco"] },
-      { name: "Aloísio Chulapa", aliases: ["aloisio chulapa", "aloisio"], clubs: ["Saint-Étienne", "Paris Saint-Germain", "São Paulo", "Al-Rayyan"] },
-      { name: "Borges", aliases: ["borges", "junior dutra borges"], clubs: ["Paraná", "São Paulo", "Grêmio", "Santos", "Cruzeiro"] },
-      { name: "Leandro Damião", aliases: ["leandro damiao", "damiao"], clubs: ["Internacional", "Santos", "Flamengo", "Kawasaki Frontale"] },
-      { name: "Renato Augusto", aliases: ["renato augusto"], clubs: ["Corinthians", "Bayer Leverkusen", "Beijing Guoan", "Corinthians"] },
-      { name: "Everton Ribeiro", aliases: ["everton ribeiro"], clubs: ["Cruzeiro", "Al-Ahli", "Flamengo", "Bahia"] },
-      { name: "Dudu", aliases: ["dudu palmeiras", "eduardo pereira rodrigues"], clubs: ["Palmeiras", "Al-Duhail", "Palmeiras", "Cruzeiro"] },
-      { name: "Gabigol", aliases: ["gabriel barbosa", "gabriel barbosa almeida"], clubs: ["Santos", "Internazionale", "Flamengo", "Cruzeiro"] },
+      { name: "Sócrates", aliases: ["socrates", "socrates brasileiro"], clubs: ["Botafogo-SP", "Corinthians", "Fiorentina", "Flamengo", "Santos", "Botafogo-SP", "Garforth Town"] },
+      { name: "Raí", aliases: ["rai", "rai souza vieira"], clubs: ["Botafogo-SP", "Ponte Preta", "Botafogo-SP", "São Paulo", "Paris Saint-Germain", "São Paulo"] },
+      { name: "Careca", aliases: ["careca", "antonio de oliveira filho"], clubs: ["Guarani", "São Paulo", "Napoli", "Kashiwa Reysol", "Santos", "Campinas", "São José-RS"] },
+      { name: "Müller", aliases: ["muller", "luiz antonio correa da costa"], clubs: ["São Paulo", "Torino", "São Paulo", "Kashiwa Reysol", "Palmeiras", "São Paulo", "Perugia", "Santos", "Cruzeiro", "Corinthians", "São Caetano", "Tupi", "Portuguesa", "Ipatinga", "Fernandópolis"] },
+      { name: "Edmundo", aliases: ["edmundo", "animal"], clubs: ["Vasco da Gama", "Palmeiras", "Parma", "Flamengo", "Corinthians", "Vasco da Gama", "Fiorentina", "Vasco da Gama", "Santos", "Napoli", "Cruzeiro", "Tokyo Verdy", "Urawa Red Diamonds", "Vasco da Gama", "Fluminense", "Nova Iguaçu", "Figueirense", "Palmeiras", "Vasco da Gama"] },
+      { name: "Romário", aliases: ["romario", "baixinho"], clubs: ["Vasco da Gama", "PSV Eindhoven", "Barcelona", "Flamengo", "Valencia", "Flamengo", "Valencia", "Flamengo", "Vasco da Gama", "Fluminense", "Al-Sadd", "Fluminense", "Vasco da Gama", "Miami FC", "Adelaide United", "América-RJ", "América-RJ"] },
+      { name: "Túlio Maravilha", aliases: ["tulio maravilha", "tulio"], clubs: ["Goiás", "Sion", "Botafogo", "Corinthians", "Vitória", "Botafogo", "Fluminense", "Cruzeiro", "Vila Nova", "São Caetano", "Botafogo", "Vila Nova", "Santa Cruz", "Újpest", "Brasiliense", "Atlético Goianiense", "Tupy", "Jorge Wilstermann", "Anapolina", "Volta Redonda", "Juventude", "Al-Shabab", "Volta Redonda", "Fast Clube", "Canedense", "Vila Nova", "Itumbiara", "Goiânia", "Botafogo-SP", "Potyguar Seridoense", "Barras", "Canedense", "Bonsucesso", "CSE", "Tanabi", "Botafogo", "Vilavelhense", "Araxá", "Atlético Carioca", "Taboão da Serra", "Sport-ES"] },
+      { name: "Viola", aliases: ["viola", "paulo sergio rosa"], clubs: ["Corinthians", "São José", "Olímpia", "Corinthians", "Valencia", "Palmeiras", "Santos", "Vasco da Gama", "Santos", "Gaziantepspor", "Guarani", "Bahia", "Flamengo", "Juventus-SP", "Uberlândia", "Duque de Caxias", "Angra dos Reis", "Resende", "Brusque", "Juventus-SP", "Morrinhos", "Pesqueira", "Grêmio Osasco", "Tanabi", "Portuguesa Santista", "Taboão da Serra"] },
+      { name: "Fred", aliases: ["fred", "fred guedes", "frederico chaves guedes"], clubs: ["América Mineiro", "Cruzeiro", "Lyon", "Fluminense", "Atlético Mineiro", "Cruzeiro", "Fluminense"] },
+      { name: "Luis Fabiano", aliases: ["luiz fabiano", "fabuloso"], clubs: ["Ponte Preta", "Rennes", "São Paulo", "Porto", "Sevilla", "São Paulo", "Tianjin Quanjian", "Vasco da Gama"] },
+      { name: "Diego Tardelli", aliases: ["tardelli"], clubs: ["São Paulo", "Real Betis", "São Caetano", "PSV Eindhoven", "Flamengo", "Atlético Mineiro", "Anzhi Makhachkala", "Al-Gharafa", "Atlético Mineiro", "Shandong Luneng", "Grêmio", "Atlético Mineiro", "Santos"] },
+      { name: "Diego Souza", aliases: ["diego souza"], clubs: ["Fluminense", "Benfica", "Flamengo", "Grêmio", "Palmeiras", "Atlético Mineiro", "Vasco da Gama", "Al-Ittihad", "Cruzeiro", "Metalist Kharkiv", "Sport Recife", "Fluminense", "Sport Recife", "São Paulo", "Botafogo", "Grêmio", "Sport Recife"] },
+      { name: "Dagoberto", aliases: ["dagoberto pelentier"], clubs: ["Athletico Paranaense", "São Paulo", "Internacional", "Cruzeiro", "Vasco da Gama", "Vitória", "San Francisco Deltas", "Londrina"] },
+      { name: "Grafite", aliases: ["grafite", "edinaldo batista libanio"], clubs: ["Ferroviária", "Santa Cruz", "Grêmio", "Anyang LG Cheetahs", "Goiás", "São Paulo", "Le Mans", "Wolfsburg", "Al-Ahli", "Al-Sadd", "Santa Cruz", "Athletico Paranaense", "Santa Cruz"] },
+      { name: "Rafael Sóbis", aliases: ["rafael sobis", "sobis"], clubs: ["Internacional", "Real Betis", "Al-Jazira", "Internacional", "Fluminense", "Tigres UANL", "Cruzeiro", "Internacional", "Ceará", "Cruzeiro"] },
+      { name: "Alex de Souza", aliases: ["alex", "alex cabeção", "alex de souza"], clubs: ["Coritiba", "Palmeiras", "Parma", "Flamengo", "Palmeiras", "Cruzeiro", "Palmeiras", "Cruzeiro", "Fenerbahçe", "Coritiba"] },
+      { name: "Darío Conca", aliases: ["dario conca", "conca"], clubs: ["Tigre", "River Plate", "Universidad Católica", "Rosario Central", "Vasco da Gama", "Fluminense", "Guangzhou Evergrande", "Fluminense", "Shanghai SIPG", "Flamengo", "Austin Bold"] },
+      { name: "Petkovic", aliases: ["dejan petkovic", "pet"], clubs: ["Radnički Niš", "Red Star Belgrade", "Real Madrid", "Sevilla", "Racing Santander", "Vitória", "Venezia", "Flamengo", "Vasco da Gama", "Shanghai Shenhua", "Vasco da Gama", "Al-Ittihad", "Fluminense", "Goiás", "Santos", "Atlético Mineiro", "Flamengo"] },
+      { name: "Paulo Nunes", aliases: ["paulo nunes"], clubs: ["Flamengo", "Grêmio", "Benfica", "Palmeiras", "Grêmio", "Corinthians", "Gama", "Al-Nassr", "Mogi Mirim"] },
+      { name: "Kléber Gladiador", aliases: ["kleber gladiador", "kleber"], clubs: ["São Paulo", "Dynamo Kyiv", "Palmeiras", "Cruzeiro", "Palmeiras", "Grêmio", "Vasco da Gama", "Coritiba", "Austin Bold"] },
+      { name: "Aloísio Chulapa", aliases: ["aloisio chulapa", "aloisio"], clubs: ["CRB", "Flamengo", "Guarani", "Goiás", "Saint-Étienne", "Paris Saint-Germain", "Rubin Kazan", "Atlético Paranaense", "São Paulo", "Al-Rayyan", "Vasco da Gama", "Ceará", "Brasiliense", "Brusque", "CRB", "Francana", "Gama", "Santa Rita", "União Barbarense", "Sport Atalaia", "Ipanema", "Amadense", "Grêmio Maringá", "Comercial-MS", "Sete de Dourados", "Nova Conquista"] },
+      { name: "Borges", aliases: ["borges", "humberlito borges", "humberlito borges teixeira"], clubs: ["Arapongas", "Inter de Bebedouro", "Jataiense", "São Caetano", "Paysandu", "Roma de Apucarana", "União São João", "Paraná", "Vegalta Sendai", "São Paulo", "Grêmio", "Santos", "Cruzeiro", "Ponte Preta", "América Mineiro"] },
+      { name: "Leandro Damião", aliases: ["leandro damiao", "damiao"], clubs: ["Atlético Ibirama", "XV de Indaial", "Marcílio Dias", "Cidade Azul", "Internacional B", "Internacional", "Santos", "Cruzeiro", "Real Betis", "Flamengo", "Internacional", "Kawasaki Frontale", "Coritiba"] },
+      { name: "Renato Augusto", aliases: ["renato augusto"], clubs: ["Flamengo", "Bayer Leverkusen", "Corinthians", "Beijing Guoan", "Corinthians", "Fluminense"] },
+      { name: "Everton Ribeiro", aliases: ["everton ribeiro"], clubs: ["Corinthians", "São Caetano", "Coritiba", "Cruzeiro", "Al-Ahli", "Flamengo", "Bahia"] },
+      { name: "Dudu", aliases: ["dudu palmeiras", "eduardo pereira rodrigues"], clubs: ["Cruzeiro", "Coritiba", "Dynamo Kyiv", "Grêmio", "Palmeiras", "Al-Duhail", "Cruzeiro", "Atlético Mineiro"] },
+      { name: "Gabigol", aliases: ["gabriel barbosa", "gabriel barbosa almeida"], clubs: ["Santos", "Internazionale", "Benfica", "Santos", "Flamengo", "Cruzeiro", "Santos"] },
       { name: "Pedro", aliases: ["pedro guilherme"], clubs: ["Fluminense", "Fiorentina", "Flamengo"] },
-      { name: "Bruno Henrique", aliases: ["bruno henrique"], clubs: ["Wolfsburg", "Santos", "Flamengo"] },
-      { name: "Ganso", aliases: ["paulo henrique ganso", "ph ganso"], clubs: ["Santos", "Sevilla", "Amiens", "Fluminense"] },
-      { name: "Rony", aliases: ["rony"], clubs: ["Athletico Paranaense", "Palmeiras", "Atlético Mineiro"] },
-      { name: "Marinho", aliases: ["marinho"], clubs: ["Ceará", "Santos", "Flamengo", "Fortaleza"] },
-      { name: "Léo Moura", aliases: ["leo moura", "leonardo moura"], clubs: ["Palmeiras", "Flamengo", "Grêmio", "Botafogo-PB"] },
-      { name: "Felipe Melo", aliases: ["felipe melo"], clubs: ["Galatasaray", "Palmeiras", "Fluminense"] },
-      { name: "D'Alessandro", aliases: ["d alessandro", "andres d alessandro", "andrés d'alessandro"], clubs: ["Internacional", "River Plate", "Internacional", "Nacional", "Internacional"] },
-      { name: "Elano", aliases: ["elano blumer"], clubs: ["Santos", "Manchester City", "Galatasaray", "Santos", "Grêmio"] },
-      { name: "Adriano", aliases: ["adriano imperador", "imperador"], clubs: ["Internazionale", "Flamengo", "Roma", "Corinthians", "Flamengo"] },
-      { name: "Paulo Baier", aliases: ["paulo baier"], clubs: ["Criciúma", "Goiás", "Athletico Paranaense", "Figueirense"] }
+      { name: "Bruno Henrique", aliases: ["bruno henrique"], clubs: ["Cruzeiro", "Uberlândia", "Itumbiara", "Goiás", "Wolfsburg", "Santos", "Flamengo"] },
+      { name: "Ganso", aliases: ["paulo henrique ganso", "ph ganso"], clubs: ["Santos", "São Paulo", "Sevilla", "Amiens", "Fluminense"] },
+      { name: "Rony", aliases: ["rony"], clubs: ["Remo", "Cruzeiro", "Náutico", "Albirex Niigata", "Athletico Paranaense", "Palmeiras", "Atlético Mineiro", "Santos"] },
+      { name: "Marinho", aliases: ["marinho"], clubs: ["Fluminense", "Internacional", "Caxias", "Paraná", "Goiás", "Ituano", "Náutico", "Ceará", "Cruzeiro", "Vitória", "Changchun Yatai", "Grêmio", "Santos", "Flamengo", "Fortaleza", "Vitória"] },
+      { name: "Léo Moura", aliases: ["leo moura", "leonardo moura"], clubs: ["Botafogo", "Linhares", "Germinal Beerschot", "ADO Den Haag", "Botafogo", "Vasco da Gama", "Palmeiras", "São Paulo", "Fluminense", "Sporting Braga", "Flamengo", "Fort Lauderdale Strikers", "FC Goa", "Metropolitano", "Santa Cruz", "Grêmio", "Botafogo-PB"] },
+      { name: "Felipe Melo", aliases: ["felipe melo"], clubs: ["Flamengo", "Cruzeiro", "Grêmio", "Mallorca", "Racing Santander", "Almería", "Fiorentina", "Juventus", "Galatasaray", "Internazionale", "Palmeiras", "Fluminense"] },
+      { name: "D'Alessandro", aliases: ["d alessandro", "andres d alessandro", "andrés d'alessandro"], clubs: ["River Plate", "Wolfsburg", "Portsmouth", "Zaragoza", "San Lorenzo", "Internacional", "River Plate", "Nacional", "Internacional"] },
+      { name: "Elano", aliases: ["elano blumer"], clubs: ["Santos", "Shakhtar Donetsk", "Manchester City", "Galatasaray", "Santos", "Grêmio", "Flamengo", "Chennaiyin", "Santos", "Chennaiyin"] },
+      { name: "Adriano", aliases: ["adriano imperador", "imperador"], clubs: ["Flamengo", "Internazionale", "Fiorentina", "Parma", "Internazionale", "São Paulo", "Flamengo", "Roma", "Corinthians", "Flamengo", "Atlético Paranaense", "Miami United"] },
+      { name: "Paulo Baier", aliases: ["paulo baier"], clubs: ["São Luiz-RS", "Criciúma", "Atlético Mineiro", "Botafogo", "Vasco da Gama", "América Mineiro", "Atlético Mineiro", "América Mineiro", "Pelotas", "Criciúma", "Goiás", "Palmeiras", "Goiás", "Sport Recife", "Atlético Paranaense", "Criciúma", "Ypiranga", "Juventude", "São Luiz-RS"] }
     ];
 
     const goal = 50;
@@ -416,6 +416,12 @@
 
     function normalize(value) {
       return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim().replace(/\s+/g, " ");
+    }
+
+    function focusGuessInput() {
+      if (!window.matchMedia("(max-width: 520px), (pointer: coarse)").matches) {
+        guessInput.focus();
+      }
     }
 
     function shuffle(items) {
@@ -456,7 +462,7 @@
       guessInput.disabled = false;
       form.querySelector("button").disabled = false;
       nextButton.hidden = true;
-      guessInput.focus();
+      focusGuessInput();
     }
 
     function endGame(won) {
@@ -509,7 +515,7 @@
         feedbackElement.textContent = `Não é esse. Você perdeu uma vida; ainda restam ${lives}.`;
         feedbackElement.className = "feedback bad";
         guessInput.value = "";
-        guessInput.focus();
+        focusGuessInput();
       }
     });
 
